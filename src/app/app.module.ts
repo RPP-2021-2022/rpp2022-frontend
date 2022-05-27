@@ -1,3 +1,4 @@
+import { ArtiklService } from './service/artikl.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -10,12 +11,39 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatListModule } from '@angular/material/list';
+import { ArtiklComponent } from './artikl/artikl.component';
+import { DobavljacComponent } from './dobavljac/dobavljac.component';
+import { PorudzbinaComponent } from './porudzbina/porudzbina.component';
+import { StavkaPorudzbineComponent } from './stavka-porudzbine/stavka-porudzbine.component';
+import { HomeComponent } from './core/home/home.component';
+import { AboutComponent } from './core/about/about.component';
+import { AuthorComponent } from './core/author/author.component';
+import { RouterModule } from '@angular/router';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTableModule } from '@angular/material/table';
+import { HttpClientModule } from '@angular/common/http';
+
+const Routes = [{path: 'artikl', component: ArtiklComponent},
+                {path: 'dobavljac', component: DobavljacComponent},
+                {path: 'porudzbina', component: PorudzbinaComponent},
+                {path: 'stavkaPorudzbine', component: StavkaPorudzbineComponent},
+                {path: 'home', component: HomeComponent},
+                {path: 'author', component: AuthorComponent},
+                {path: 'about', component: AboutComponent},
+                {path: '', redirectTo: 'home', pathMatch: 'full'}];
 
 @NgModule({
   declarations: [
     AppComponent,
     VoziloComponent,
-    AutomobilComponent
+    AutomobilComponent,
+    ArtiklComponent,
+    DobavljacComponent,
+    PorudzbinaComponent,
+    StavkaPorudzbineComponent,
+    HomeComponent,
+    AboutComponent,
+    AuthorComponent
   ],
   imports: [
     BrowserModule,
@@ -24,9 +52,13 @@ import { MatListModule } from '@angular/material/list';
     MatButtonModule,
     MatIconModule,
     BrowserAnimationsModule,
-    MatListModule
+    MatListModule,
+    MatToolbarModule,
+    MatTableModule,
+    HttpClientModule,
+    RouterModule.forRoot(Routes)
   ],
-  providers: [],
+  providers: [ArtiklService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
