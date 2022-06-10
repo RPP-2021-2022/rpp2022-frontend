@@ -1,12 +1,15 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Observable } from 'rxjs/internal/Observable';
 import { StavkaPorudzbine } from '../model/stavka-porudzbine.model';
+import { Porudzbina } from './../model/porudzbina.model';
 
 @Injectable()
 export class StavkaPorudzbineService {
   private readonly API_URL = 'http://localhost:8082/stavkaPorudzbine/';
+
+  private readonly API_URL_P = 'http://localhost:8082/stavkeZaPorudzbinu/';
 
   dataChange: BehaviorSubject<StavkaPorudzbine[]> = new BehaviorSubject<StavkaPorudzbine[]>([]);
 
@@ -14,6 +17,18 @@ export class StavkaPorudzbineService {
 
   public getAllStavkaPorudzbine(): Observable<StavkaPorudzbine[]> {
     this.httpClient.get<StavkaPorudzbine[]>(this.API_URL).subscribe(
+      (data) => {
+        this.dataChange.next(data);
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.name + ' ' + error.message);
+      }
+    );
+    return this.dataChange.asObservable();
+  }
+
+  public getAllStavkeZaPorudzbinu(idPodudzbine: number): Observable<StavkaPorudzbine[]> {
+    this.httpClient.get<StavkaPorudzbine[]>(this.API_URL_P + idPodudzbine).subscribe(
       (data) => {
         this.dataChange.next(data);
       },

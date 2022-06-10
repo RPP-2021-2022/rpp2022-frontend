@@ -2,20 +2,23 @@
     <span class="title-center">Artikl</span>
 </mat-toolbar>
 <div class="container mat-elevation-z8">
-    <mat-table [dataSource]="dataSource" class="mat-cell">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Filter">
+  </mat-form-field>
+    <mat-table [dataSource]="dataSource" class="mat-cell" matSort>
 
         <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef>Id</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
             <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="naziv">
-            <mat-header-cell *matHeaderCellDef>Naziv</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Naziv</mat-header-cell>
             <mat-cell *matCellDef="let row">{{row.naziv}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="proizvodjac">
-            <mat-header-cell *matHeaderCellDef>Proizvodjac</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Proizvodjac</mat-header-cell>
             <mat-cell *matCellDef="let row">{{row.proizvodjac}}</mat-cell>
         </ng-container>
 
@@ -40,6 +43,8 @@
         <mat-row style="cursor: default" *matRowDef="let row; columns: displayedColumns">
         </mat-row>
     </mat-header-row>
-
     </mat-table>
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+
+    </mat-paginator>
 </div>

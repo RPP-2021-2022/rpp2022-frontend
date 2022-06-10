@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { trimTrailingNulls } from '@angular/compiler/src/render3/view/util';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs/internal/Observable';
 import { ArtiklDialogComponent } from '../dialog/artikl-dialog/artikl-dialog.component';
 import { Artikl } from '../model/artikl.model';
@@ -14,7 +18,14 @@ export class ArtiklComponent implements OnInit {
 
   displayedColumns = ['id', 'naziv', 'proizvodjac', 'actions'];
 
-  dataSource!: Observable<Artikl[]>;
+  //dataSource!: Observable<Artikl[]>;
+  dataSource!: MatTableDataSource<Artikl>;
+
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
+
+  @ViewChild(MatSort)
+  sort!: MatSort;
 
   constructor(public artiklService: ArtiklService,
     public dialog: MatDialog) { }
@@ -24,7 +35,18 @@ export class ArtiklComponent implements OnInit {
   }
 
   public loadData(){
-    this.dataSource = this.artiklService.getAllArtikl();
+    //this.dataSource = this.artiklService.getAllArtikl();
+    this.artiklService.getAllArtikl().subscribe( data => {
+      this.dataSource = new MatTableDataSource(data);
+      this.dataSource.sortingDataAccessor = (data:any, property) =>{
+        switch(property){
+          case 'id': return data[property];
+          default: return data[property].toLocaleLowerCase();
+        }
+      };
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    });
   }
 
   public openDialog(flag: number, id: number, naziv: string, proizvodjac: string) {
@@ -35,7 +57,14 @@ export class ArtiklComponent implements OnInit {
         this.loadData();
       }
     })
-}
+  }
+
+
+  applyFilter(filterValue: string) {
+    filterValue.trim();
+    filterValue = filterValue.toLowerCase();
+    this.dataSource.filter = filterValue;
+  }
 
 
 }
